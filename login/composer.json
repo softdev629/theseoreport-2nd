@@ -1,0 +1,7 @@
+{
+    "name": "theseoreports/portal",
+    "type": "project",
+    "require": {
+        "league/oauth2-client": "^2.6"
+    }
+}
