@@ -2,6 +2,7 @@
     "name": "theseoreports/portal",
     "type": "project",
     "require": {
-        "league/oauth2-client": "^2.6"
+        "league/oauth2-client": "^2.6",
+        "phpoffice/phpspreadsheet": "^1.26"
     }
 }

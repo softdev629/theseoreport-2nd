@@ -469,7 +469,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
                       <td><a href="reports/<?PHP echo $user_data['imgPath']; ?>" target="_blank" download><i
                             class="fa  fa-download text-inverse" title="Download Report"
                             style="font-size:15px;"></i></a>&nbsp;&nbsp;&nbsp;
-                        <a href="reports/<?PHP echo $user_data['imgPath']; ?>" target="_blank"><i
+                        <a href="viewLinkingReport.php?path=<?PHP echo $user_data['imgPath']; ?>" target="_blank"><i
                             class="fa  fa-eye text-success" title="View Report"
                             style="font-size:15px;"></i></a>&nbsp;&nbsp;&nbsp;
                         <a href="upload_report.php?action=delete&rid=<?PHP echo $user_data['id']; ?>&cid=<?PHP echo $cid; ?>&pid=<?PHP echo $pid; ?>"
