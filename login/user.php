@@ -142,21 +142,21 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                   <th>SN</th>
                   <th>Name
                     <a
-                      href="user.php?orderby=DESC&page=<?php echo $page; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
+                      href="user.php?orderby=DESC&page=<?php echo ""; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
                         style="font-size:19px;">&nbsp &nbsp <i class="fa fa-sort-alpha-desc text-inverse"
                           title="Descending Order"></i></span></a>
                     <a
-                      href="user.php?orderby=ASC&page=<?php echo $page; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
+                      href="user.php?orderby=ASC&page=<?php echo ""; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
                         style="font-size:19px;">&nbsp <i class="fa fa-sort-alpha-asc text-success"
                           title="Ascending Order"></i></span></a>
                   </th>
                   <th>Username / Email
                     <a
-                      href="user.php?orderby=DESC&page=<?php echo $page; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=email&mode=show"><span
+                      href="user.php?orderby=DESC&page=<?php echo ""; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=email&mode=show"><span
                         style="font-size:19px;">&nbsp &nbsp <i class="fa fa-sort-alpha-desc text-inverse"
                           title="Descending Order"></i></span></a>
                     <a
-                      href="user.php?orderby=ASC&page=<?php echo $page; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=email&mode=show"><span
+                      href="user.php?orderby=ASC&page=<?php echo ""; ?>&usertype=<?php echo $usertype; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=email&mode=show"><span
                         style="font-size:19px;">&nbsp <i class="fa fa-sort-alpha-asc text-success"
                           title="Ascending Order"></i></span></a>
                   </th>

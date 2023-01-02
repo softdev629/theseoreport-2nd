@@ -8,8 +8,8 @@ require_once __DIR__ . '/includes/check-session.php';
 require_once __DIR__ . '/includes/init-session.php';
 
 if ($_SESSION['usertype'] != 'Administrator') {
-    header("Location: $DASHBOARD_PAGE_PATH");
-    exit;
+  header("Location: $DASHBOARD_PAGE_PATH");
+  exit;
 }
 
 ?>
@@ -17,35 +17,35 @@ if ($_SESSION['usertype'] != 'Administrator') {
 <?php
 
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
-    mysqli_query($link, "insert into rl_package(name) values('" . $_POST['name'] . "')");
-    header("location: package.php?mode=show&msg=added");
+  mysqli_query($link, "insert into rl_package(name) values('" . $_POST['name'] . "')");
+  header("location: package.php?mode=show&msg=added");
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 
-    mysqli_query($link, "update rl_package SET name='" . $_POST['name'] . "' where id='" . $_POST['uid'] . "'");
-    header("location: package.php?mode=show&msg=edited");
+  mysqli_query($link, "update rl_package SET name='" . $_POST['name'] . "' where id='" . $_POST['uid'] . "'");
+  header("location: package.php?mode=show&msg=edited");
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
-    mysqli_query($link, "delete from rl_package where id='" . $_REQUEST['uid'] . "'");
-    header("location: package.php?mode=show&msg=deleted");
+  mysqli_query($link, "delete from rl_package where id='" . $_REQUEST['uid'] . "'");
+  header("location: package.php?mode=show&msg=deleted");
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'added') {
-    $message = 'Record Added Successfully.';
+  $message = 'Record Added Successfully.';
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'edited') {
-    $message = 'Record Edited Successfully.';
+  $message = 'Record Edited Successfully.';
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'deleted') {
-    $message = 'Record Delete Successfully.';
+  $message = 'Record Delete Successfully.';
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
-    $message = 'Username already exist.';
+  $message = 'Username already exist.';
 }
 
 ?>
@@ -105,8 +105,8 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
           </div>
           <div class="table-responsive">
             <?PHP
-                            $searchkeyword = @$_REQUEST['searchkeyword'];
-                            ?>
+              $searchkeyword = @$_REQUEST['searchkeyword'];
+              ?>
 
             <table class="table table-striped b-t b-light">
               <thead>
@@ -114,11 +114,11 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                   <th>S.No.</th>
                   <th>Name
                     <a
-                      href="package.php?orderby=DESC&page=<?php echo $page; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
+                      href="package.php?orderby=DESC&page=<?php echo ""; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
                         style="font-size:19px;">&nbsp &nbsp <i class="fa fa-sort-alpha-desc text-inverse"
                           title="Descending Order"></i></span></a>
                     <a
-                      href="package.php?orderby=ASC&page=<?php echo $page; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
+                      href="package.php?orderby=ASC&page=<?php echo ""; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
                         style="font-size:19px;">&nbsp <i class="fa fa-sort-alpha-asc text-success"
                           title="Ascending Order"></i></span></a>
                   </th>
@@ -128,30 +128,30 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
               </thead>
               <tbody>
                 <?PHP
-                                    $k = @$_REQUEST['orderby'];
-                                    if ($k == '') {
-                                        $k = "asc";
-                                    }
+                  $k = @$_REQUEST['orderby'];
+                  if ($k == '') {
+                    $k = "asc";
+                  }
 
-                                    $orderfield = @$_REQUEST['orderfield'];
-                                    if ($orderfield == '') {
-                                        $orderfield = "name";
-                                    }
+                  $orderfield = @$_REQUEST['orderfield'];
+                  if ($orderfield == '') {
+                    $orderfield = "name";
+                  }
 
-                                    $qq = "select * from rl_package where 1=1 ";
+                  $qq = "select * from rl_package where 1=1 ";
 
-                                    if (@$_REQUEST['searchkeyword']) {
-                                        $qq .= " and ( name LIKE '%" . $_REQUEST['searchkeyword'] . "%' )";
-                                    }
+                  if (@$_REQUEST['searchkeyword']) {
+                    $qq .= " and ( name LIKE '%" . $_REQUEST['searchkeyword'] . "%' )";
+                  }
 
-                                    $qq .= " ORDER BY $orderfield $k";
+                  $qq .= " ORDER BY $orderfield $k";
 
-                                    //echo $qq;
-
-                                    $user = mysqli_query($link, $qq);
-                                    $i = 1;
-                                    while ($user_data = mysqli_fetch_array($user)) {
-                                    ?>
+                  //echo $qq;
+                
+                  $user = mysqli_query($link, $qq);
+                  $i = 1;
+                  while ($user_data = mysqli_fetch_array($user)) {
+                    ?>
                 <tr>
                   <td>
                     <?PHP echo $i; ?>.
@@ -175,29 +175,29 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                   </td>
                 </tr>
                 <?PHP
-                                        $i = $i + 1;
-                                    } ?>
+                    $i = $i + 1;
+                  } ?>
               </tbody>
             </table>
           </div>
           <!--<footer class="panel-footer">
-      <div class="row">
-        
-        <div class="col-sm-5 text-center">
-          <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+        <div class="row">
+          
+          <div class="col-sm-5 text-center">
+            <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+          </div>
+          <div class="col-sm-7 text-right text-center-xs">                
+            <ul class="pagination pagination-sm m-t-none m-b-none">
+              <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
+              <li><a href="">1</a></li>
+              <li><a href="">2</a></li>
+              <li><a href="">3</a></li>
+              <li><a href="">4</a></li>
+              <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
+            </ul>
+          </div>
         </div>
-        <div class="col-sm-7 text-right text-center-xs">                
-          <ul class="pagination pagination-sm m-t-none m-b-none">
-            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
-            <li><a href="">1</a></li>
-            <li><a href="">2</a></li>
-            <li><a href="">3</a></li>
-            <li><a href="">4</a></li>
-            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
-          </ul>
-        </div>
-      </div>
-    </footer>-->
+      </footer>-->
         </div>
         <?PHP } ?>
 
@@ -242,9 +242,9 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
         <?PHP if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'edit') { ?>
 
         <?PHP
-                    $user = mysqli_query($link, "select * from rl_package where id='" . $_POST['uid'] . "'");
-                    $user_data = mysqli_fetch_array($user);
-                    ?>
+          $user = mysqli_query($link, "select * from rl_package where id='" . $_POST['uid'] . "'");
+          $user_data = mysqli_fetch_array($user);
+          ?>
         <section class="panel">
           <header class="panel-heading">
             Edit Package

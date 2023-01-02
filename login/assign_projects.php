@@ -7,38 +7,38 @@ require_once __DIR__ . '/includes/check-session.php';
 require_once __DIR__ . '/includes/init-session.php';
 
 if ($_SESSION['usertype'] != 'Administrator') {
-    header('Location: dashboard.php');
-    exit;
+  header('Location: dashboard.php');
+  exit;
 }
 
 ?>
 
 <?PHP
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
-    mysqli_query($link, "delete from rl_projects_assign where cid='" . $_POST['cid'] . "'");
+  mysqli_query($link, "delete from rl_projects_assign where cid='" . $_POST['cid'] . "'");
 
-    $tnumber = $_POST['tnumber'];
-    for ($m = 1; $m <= $tnumber; $m++) {
-        if ($_POST['project' . $m] != '') {
-            mysqli_query($link, "insert into rl_projects_assign(cid,pid) values('" . $_POST['cid'] . "','" . $_POST['project' . $m] . "')");
-        }
+  $tnumber = $_POST['tnumber'];
+  for ($m = 1; $m <= $tnumber; $m++) {
+    if ($_POST['project' . $m] != '') {
+      mysqli_query($link, "insert into rl_projects_assign(cid,pid) values('" . $_POST['cid'] . "','" . $_POST['project' . $m] . "')");
     }
-    header("location: assign_projects.php?mode=show&msg=added");
+  }
+  header("location: assign_projects.php?mode=show&msg=added");
 }
 
 
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'added') {
-    $message = 'Record Updated Successfully.';
+  $message = 'Record Updated Successfully.';
 }
 if (isset($_GET['msg']) && $_GET['msg'] == 'edited') {
-    $message = 'Record Edited Successfully.';
+  $message = 'Record Edited Successfully.';
 }
 if (isset($_GET['msg']) && $_GET['msg'] == 'deleted') {
-    $message = 'Record Delete Successfully.';
+  $message = 'Record Delete Successfully.';
 }
 if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
-    $message = 'Username already exist.';
+  $message = 'Username already exist.';
 }
 ?>
 
@@ -123,8 +123,8 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
           </div>
           <div class="table-responsive">
             <?PHP
-                            $searchkeyword = @$_REQUEST['searchkeyword'];
-                            ?>
+              $searchkeyword = @$_REQUEST['searchkeyword'];
+              ?>
 
 
             <table class="table table-striped b-t b-light">
@@ -133,11 +133,11 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                   <th>S.No.</th>
                   <th>Name
                     <a
-                      href="client.php?orderby=DESC&page=<?php echo $page; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
+                      href="client.php?orderby=DESC&page=<?php echo ""; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
                         style="font-size:19px;">&nbsp &nbsp <i class="fa fa-sort-alpha-desc text-inverse"
                           title="Descending Order"></i></span></a>
                     <a
-                      href="client.php?orderby=ASC&page=<?php echo $page; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
+                      href="client.php?orderby=ASC&page=<?php echo ""; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=name&mode=show"><span
                         style="font-size:19px;">&nbsp <i class="fa fa-sort-alpha-asc text-success"
                           title="Ascending Order"></i></span></a>
                   </th>
@@ -147,33 +147,33 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
               </thead>
               <tbody>
                 <?PHP
-                                    $k = @$_REQUEST['orderby'];
-                                    if ($k == '') {
-                                        $k = "DESC";
-                                    }
+                  $k = @$_REQUEST['orderby'];
+                  if ($k == '') {
+                    $k = "DESC";
+                  }
 
-                                    $orderfield = @$_REQUEST['orderfield'];
-                                    if ($orderfield == '') {
-                                        $orderfield = "id";
-                                    }
+                  $orderfield = @$_REQUEST['orderfield'];
+                  if ($orderfield == '') {
+                    $orderfield = "id";
+                  }
 
-                                    $qq = "select * from rl_login where 1=1  and userType='Client'";
+                  $qq = "select * from rl_login where 1=1  and userType='Client'";
 
-                                    if (@$_REQUEST['searchkeyword']) {
-                                        $qq .= " and (email LIKE '%" . $_REQUEST['searchkeyword'] . "%' OR name LIKE '%" . $_REQUEST['searchkeyword'] . "%' OR phone LIKE '%" . $_REQUEST['searchkeyword'] . "%' )";
-                                    }
+                  if (@$_REQUEST['searchkeyword']) {
+                    $qq .= " and (email LIKE '%" . $_REQUEST['searchkeyword'] . "%' OR name LIKE '%" . $_REQUEST['searchkeyword'] . "%' OR phone LIKE '%" . $_REQUEST['searchkeyword'] . "%' )";
+                  }
 
-                                    $qq .= " ORDER BY $orderfield $k";
+                  $qq .= " ORDER BY $orderfield $k";
 
-                                    //echo $qq;
+                  //echo $qq;
+                
+                  $user = mysqli_query($link, $qq);
+                  $i = 1;
+                  while ($user_data = mysqli_fetch_array($user)) {
 
-                                    $user = mysqli_query($link, $qq);
-                                    $i = 1;
-                                    while ($user_data = mysqli_fetch_array($user)) {
-
-                                        $created = mysqli_query($link, "select * from rl_login where id='" . $user_data['createdBy'] . "'");
-                                        $created_data = mysqli_fetch_array($created);
-                                    ?>
+                    $created = mysqli_query($link, "select * from rl_login where id='" . $user_data['createdBy'] . "'");
+                    $created_data = mysqli_fetch_array($created);
+                    ?>
                 <tr>
                   <td>
                     <?PHP echo $i; ?>
@@ -183,26 +183,26 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                   </td>
                   <td>
                     <?PHP
-                                                $client = mysqli_query($link, "select * from rl_projects where cid='" . $user_data['id'] . "'");
-                                                while ($client_data = mysqli_fetch_array($client)) {
-                                                    echo '<li style="list-style-type: disc;">' . $client_data['projectName'] . '</li>';
-                                                }
-                                                ?>
+                        $client = mysqli_query($link, "select * from rl_projects where cid='" . $user_data['id'] . "'");
+                        while ($client_data = mysqli_fetch_array($client)) {
+                          echo '<li style="list-style-type: disc;">' . $client_data['projectName'] . '</li>';
+                        }
+                        ?>
                   </td>
                   <td>
                     <?PHP
-                                                $sql = mysqli_query($link, "select * from rl_projects_assign where cid='" . $user_data['id'] . "'");
-                                                while ($sql_data = mysqli_fetch_array($sql)) {
-                                                    $client = mysqli_query($link, "select * from rl_projects where id='" . $sql_data['pid'] . "'");
-                                                    $client_data = mysqli_fetch_array($client);
-                                                    echo '<li style="list-style-type: disc;">' . $client_data['projectName'] . '</li>';
-                                                }
-                                                ?>
+                        $sql = mysqli_query($link, "select * from rl_projects_assign where cid='" . $user_data['id'] . "'");
+                        while ($sql_data = mysqli_fetch_array($sql)) {
+                          $client = mysqli_query($link, "select * from rl_projects where id='" . $sql_data['pid'] . "'");
+                          $client_data = mysqli_fetch_array($client);
+                          echo '<li style="list-style-type: disc;">' . $client_data['projectName'] . '</li>';
+                        }
+                        ?>
                   </td>
                 </tr>
                 <?PHP
-                                        $i = $i + 1;
-                                    } ?>
+                    $i = $i + 1;
+                  } ?>
               </tbody>
             </table>
           </div>
@@ -228,9 +228,9 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                     class="form-control input100" required>
                     <option value="">--Select--</option>
                     <?PHP
-                                            $client = mysqli_query($link, "select * from rl_login where userType='Client'");
-                                            while ($client_data = mysqli_fetch_array($client)) {
-                                            ?>
+                      $client = mysqli_query($link, "select * from rl_login where userType='Client'");
+                      while ($client_data = mysqli_fetch_array($client)) {
+                        ?>
                     <option value="<?PHP echo $client_data['id']; ?>">
                       <?PHP echo $client_data['name']; ?> [
                       <?PHP echo $client_data['email']; ?>]

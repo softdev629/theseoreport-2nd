@@ -26,6 +26,8 @@ $oauth_redirect_url = "https://theseoreporting.com/login/sso-login.php";
 $oauth_access_token_endpoint_url = 'https://sso-api-prod.apigateway.co/oauth2/token';
 $oauth_resource_owner_details_endpoint_url = 'https://sso-api-prod.apigateway.co/oauth2/user-info';
 
+$awr_api_token = "c5ea61d7ef87b3e68e8037250595c085";
+
 $date = date('Y-m-d');
 $offset = 5 * 60 * 60 + 1800;
 $dateFormat = 'Y-m-d H:i:s';
