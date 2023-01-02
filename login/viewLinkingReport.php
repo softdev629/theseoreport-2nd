@@ -6,11 +6,6 @@ require_once __DIR__ . '/includes/common.php';
 require_once __DIR__ . '/includes/database.php';
 require_once __DIR__ . '/includes/check-session.php';
 require_once __DIR__ . '/includes/init-session.php';
-
-if ($_SESSION['usertype'] != 'Administrator') {
-  header("Location: $DASHBOARD_PAGE_PATH?account_id=". $_SESSION['account_id']);
-  exit;
-}
 ?>
 
 <!DOCTYPE html>

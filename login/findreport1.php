@@ -53,8 +53,8 @@ $newDate = date("d F Y", strtotime($orgDate));
       <td><a href="reports/<?PHP echo $user_data['imgPath']; ?>" target="_blank" download><i
             class="fa  fa-download text-inverse" title="Download Report"
             style="font-size:25px;"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="reports/<?PHP echo $user_data['imgPath']; ?>" target="_blank"><i class="fa  fa-eye text-success"
-            title="View Report" style="font-size:25px;"></i></a>
+        <a href="viewLinkingReport.php?title=<?php echo $user_data['reporttype']. " ". $newDate ?>&path=<?PHP echo $user_data['imgPath']; ?>"
+          target="_blank"><i class="fa  fa-eye text-success" title="View Report" style="font-size:25px;"></i></a>
       </td>
     </tr>
     <?PHP 
