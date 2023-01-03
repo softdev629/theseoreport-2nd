@@ -2,6 +2,8 @@
 </section>
 <!--main content end-->
 </section>
+
+
 <script src="<?PHP echo $website_url; ?>/js/bootstrap.js"></script>
 <script src="<?PHP echo $website_url; ?>/js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?PHP echo $website_url; ?>/js/scripts.js"></script>
@@ -12,6 +14,7 @@
 <!-- morris JavaScript -->
 <script>
 $(document).ready(function() {
+
   //BOX BUTTON SHOW AND CLOSE
   jQuery('.small-graph-box').hover(function() {
     jQuery(this).find('.box-button').fadeIn('fast');
@@ -41,41 +44,36 @@ $(document).ready(function() {
     lineWidth: 0,
     fillOpacity: 0.85,
     data: [
-
-      <
-      ?
-      PHP
+      <?PHP
       $i = 12;
       while ($i >= 0) {
-        $ym = date('Y-m', strtotime("-$i month"));
+        $ym = date("Y-m", strtotime("-$i month"));
         $yms[$ym] = $ym;
-        $graph_client = mysqli_query($link,
-          "SELECT * FROM rl_login WHERE userType = 'Client' AND dateAdded LIKE '%".$ym.
-          "%'");
+        $graph_client = mysqli_query(
+          $link,
+          "SELECT * FROM rl_login WHERE userType=\"Client\" AND dateAdded LIKE \"%".$ym.
+          "%\""
+        );
         $graph_client_numee = mysqli_num_rows($graph_client);
 
-        $graph_report = mysqli_query($link, "SELECT * FROM rl_report WHERE dateAdded LIKE '%".$ym.
-          "%'");
+        $graph_report = mysqli_query($link, "SELECT * FROM rl_report WHERE dateAdded LIKE \"%".$ym.
+          "%\"");
         $graph_report_numee = mysqli_num_rows($graph_report);
 
-        $graph_report_unique = mysqli_query($link,
-          "SELECT DISTINCT pid FROM rl_report WHERE dateAdded LIKE '%".$ym.
-          "%'");
-        $graph_report_unique_numee = mysqli_num_rows($graph_report_unique); ?
-        >
-        {
-          period: '<?PHP echo $ym; ?>',
-          iphone: < ? PHP echo $graph_client_numee; ? > ,
-          ipad : < ? PHP echo $graph_report_numee; ? > ,
-          itouch : < ? PHP echo $graph_report_unique_numee; ? >
-        }, <
-        ?
-        PHP
-        $i--;
-      } ?
-      >
-
-    ],
+        $graph_report_unique = mysqli_query(
+          $link,
+          "SELECT DISTINCT pid FROM rl_report WHERE dateAdded LIKE \"%".$ym.
+          "%\""
+        );
+        $graph_report_unique_numee = mysqli_num_rows($graph_report_unique);
+        ' + ' ?>
+        { period: '<?PHP echo $ym; ?>',
+          iphone: '<?PHP echo $graph_client_numee; ?>',
+          ipad: '<?PHP echo $graph_report_numee; ?>',
+          itouch: '<?PHP echo $graph_report_unique_numee; ?>'
+      },
+      <?PHP $i--;
+    } ?> ],
     lineColors: ['#eb6f6f', '#926383', '#eb6f6f'],
     xkey: 'period',
     redraw: true,
@@ -85,8 +83,6 @@ $(document).ready(function() {
     hideHover: 'auto',
     resize: true
   });
-
-
 });
 </script>
 <!-- calendar -->
@@ -117,16 +113,16 @@ $(window).load(function() {
     case 'file:':
       alert('Just a heads-up, events will not work when run locally.');
   }
-
 });
+
 </script>
 <!-- //calendar -->
 </body>
 <?php if ($VENDASTA_DATA_URL != ''): ?>
 
 <script src="https://www.cdnstyles.com/static/product_navbar/v1/product_navbar.js" data-url="<?= $VENDASTA_DATA_URL ?>"
-  data-account-id="<?= $_SESSION['account_id'] ?>" data-app-id="<?= $PRODUCT_ID ?>"
-  target-element-class="top-nav-element">
+  data-account-id=" <?= $_SESSION['account_id'] ?>" data-app-id="<?= $PRODUCT_ID ?>"
+  target-element-class=" top-nav-element">
 </script>
 
 <?php endif; ?>

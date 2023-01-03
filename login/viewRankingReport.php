@@ -49,6 +49,8 @@ if ($_SESSION['usertype'] != 'Client') {
   <title>Ranking Report </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/main.css">
+  <link href="node_modules/tom-select/dist/css/tom-select.css" rel="stylesheet">
+  <script src="node_modules/tom-select/dist/js/tom-select.complete.min.js"></script>
 
   <script>
   function getXMLHTTP() { //fuction to return the xml http object
@@ -94,6 +96,13 @@ if ($_SESSION['usertype'] != 'Client') {
         if (req.readyState == 4) {
           if (req.status == 200) {
             document.getElementById('projectdatediv').innerHTML = req.responseText;
+            new TomSelect("#select-date", {
+              create: false,
+              sortField: {
+                field: "text",
+                direction: "desc"
+              }
+            });
           } else {
             alert("There was a problem while using XMLHTTP:\n" + req.statusText);
           }
@@ -129,7 +138,7 @@ if ($_SESSION['usertype'] != 'Client') {
 
               <div id="projectdiv" style="float:left;margin-bottom:20px;">
                 <select class="input-sm form-control w-sm inline v-middle" name="pid" style="width:215px;"
-                  onchange="getProjectDate('findreport3.php?pid='+this.value)">
+                  onchange="getProjectDate('findreport3.php?date=&pid=' + this.value)">
                   <option value=''> &nbsp; &nbsp; &nbsp; - - &nbsp; Select Project Name &nbsp; - - </option>
                   <?PHP
                                         $cli = mysqli_query($link, "select * from rl_projects where cid='" . $_SESSION['UID'] . "'  order by projectName ASC");
