@@ -26,26 +26,26 @@ $dates = $response["details"]["dates"]; // date and search depth arrays
 ?>
 
 <div class="row text-center">
-  <div class="col-md-4 bg-success" style="padding: 15px;">
+  <div class="col-md-4" style="padding: 15px; background-color: #939597;">
     <strong class="p-2">Current Report</strong>
     <p style="padding: 6px;">
       <?php
       $current_date = $dates[count($dates) - 1]["date"];
-      echo $current_date;
+      echo date_format(date_create($current_date), 'm-d-Y');
       ?>
     </p>
   </div>
-  <div class="col-md-4 bg-info" style="padding: 15px;">
+  <div class="col-md-4" style="padding: 15px; background-color: #A09998;">
     <strong>Next Report</strong>
     <p style="padding: 6px;">
       <?php
       $next_date = date_create($current_date);
       date_add($next_date, date_interval_create_from_date_string('7 days'));
-      echo date_format($next_date, 'Y-m-d');
+      echo date_format($next_date, 'm-d-Y');
       ?>
     </p>
   </div>
-  <div class="col-md-4 bg-success" style="padding: 15px;">
+  <div class="col-md-4" style="padding: 15px; background-color: #939597;">
     <strong>Report History</strong><br>
     <select id="select-date" placeholder="Choose Date"
       onchange="getProjectDate('findreport3.php?pid=' + <?php echo $pid ?> + '&date=' + this.value)">
@@ -69,45 +69,120 @@ $dates = $response["details"]["dates"]; // date and search depth arrays
 // if date is empty, it's last update date
 $chosen_date = ($_GET['date'] == '' ? $current_date : $_GET['date']);
 
-// get lists of date that project has
-$url = "https://api.awrcloud.com/get.php?action=list&project=" . $projectName . "&date=" . ($_GET['date'] == '' ? $current_date : $_GET['date']) . "&token=" . $token . "&compression=zip";
-$rankingResultsResponse = file_get_contents($url);
-$responseRows = explode("\n", $rankingResultsResponse);
+$report_file_name = $chosen_date . "_" . $projectName . ".xlsx";
 
-if ($responseRows[0] != "OK") {
-  echo "No results for date: " . $date;
+if (file_exists("reports/ranking/$report_file_name")) {
+  ?>
+<table class="table table-striped b-t b-light">
+  <?php
+    // (A) PHPSPREADSHEET TO LOAD EXCEL FILES
+    require "vendor/autoload.php";
+
+    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+    $spreadsheet = $reader->load("reports/ranking/$report_file_name");
+    $worksheet = $spreadsheet->getActiveSheet();
+
+    // (B) LOOP THROUGH ROWS OF CURRENT WORKSHEET
+    foreach ($worksheet->getRowIterator() as $row) {
+      // (B1) READ CELLS
+      $cellIterator = $row->getCellIterator();
+      $cellIterator->setIterateOnlyExistingCells(false);
+
+      // (B2) OUTPUT HTML
+      echo "<tr>";
+      foreach ($cellIterator as $cell) {
+        echo "<td>" . $cell->getValue() . "</td>";
+      }
+      echo "</tr>";
+    }
+    ?>
+</table>
+<?php
 } else {
-  $dateFilesCount = $responseRows[1];
-  if ($dateFilesCount != 0) {
-    for ($i = 0; $i < $dateFilesCount; $i++) {
-      $urlRequest = $responseRows[2 + $i];
-      $urlHandle = fopen($urlRequest, 'r');
+  // get lists of date that project has
+  $url = "https://api.awrcloud.com/get.php?action=list&project=" . $projectName . "&date=" . ($_GET['date'] == '' ? $current_date : $_GET['date']) . "&token=" . $token . "&compression=zip";
+  $rankingResultsResponse = file_get_contents($url);
+  $responseRows = explode("\n", $rankingResultsResponse);
 
-      $tempZip = fopen("tempfile.zip", "w");
+  if ($responseRows[0] != "OK") {
+    echo "No results for date: " . $date;
+  } else {
+    $dateFilesCount = $responseRows[1];
+    if ($dateFilesCount != 0) {
+      for ($i = 0; $i < $dateFilesCount; $i++) {
+        $urlRequest = $responseRows[2 + $i];
+        $urlHandle = fopen($urlRequest, 'r');
 
-      while (!feof($urlHandle)) {
-        $readChunk = fread($urlHandle, 1024 * 8);
-        fwrite($tempZip, $readChunk);
-      }
-      fclose($tempZip);
-      fclose($urlHandle);
+        $tempZip = fopen("tempfile.zip", "w");
 
-      $pathToExtractedJson = "reports/jsons/";
+        while (!feof($urlHandle)) {
+          $readChunk = fread($urlHandle, 1024 * 8);
+          fwrite($tempZip, $readChunk);
+        }
+        fclose($tempZip);
+        fclose($urlHandle);
 
-      $zip = new ZipArchive;
-      $res = $zip->open("tempfile.zip");
+        $pathToExtractedJson = "reports/jsons/";
+        // zip file extract
+        $zip = new ZipArchive;
+        $res = $zip->open("tempfile.zip");
 
-      if ($res === FALSE) {
-        echo "Could not extract JSON files from the zip archive";
-        continue;
-      }
+        if ($res === FALSE) {
+          echo "Could not extract JSON files from the zip archive";
+          continue;
+        }
 
-      $zip->extractTo($pathToExtractedJson);
-      $zip->close();
+        $zip->extractTo($pathToExtractedJson);
+        $zip->close();
 
-      $dir_handle = opendir($pathToExtractedJson);
+        $dir_handle = opendir($pathToExtractedJson);
 
-      ?>
+        // stores information as array
+        $ranking_report = array();
+        while (false !== ($entry = readdir($dir_handle))) {
+          if ($entry == ".." || $entry == ".") {
+            continue;
+          }
+
+          $rankings = json_decode(file_get_contents($pathToExtractedJson . $entry), true); // the json file contains nested json objects, make sure you use associative arrays
+          $searchengine = $rankings['searchengine'];
+          $keyword = $rankings['keyword'];
+          // Use three dimensional array to save data as table
+          if (!array_key_exists($keyword, $ranking_report)) {
+            $ranking_report[$keyword] = array("google" => 0, "bing" => 0, "yahoo" => 0);
+          }
+          switch ($searchengine) {
+            case (substr_compare("google", $searchengine, 0, 6) == 0):
+              $ranking_report[$keyword]["google"] = count($rankings["rankdata"]);
+              break;
+            case (substr_compare("bing", $searchengine, 0, 4) == 0):
+              $ranking_report[$keyword]["bing"] = count($rankings["rankdata"]);
+              break;
+            case (substr_compare("yahoo", $searchengine, 0, 4) == 0):
+              $ranking_report[$keyword]["yahoo"] = count($rankings["rankdata"]);
+              break;
+          }
+          unlink($pathToExtractedJson . $entry);
+        }
+
+        $htmlString = '<table><tr><td>' . date_format(date_create($chosen_date), 'm-d-Y') . '</td><td>Google</td><td>Bing</td><td>Yahoo</td>';
+        foreach ($ranking_report as $key => $value) {
+          $htmlString .= '<tr><td>' . $key . '</td>';
+          $htmlString .= '<td>' . $value["google"] . '</td>';
+          $htmlString .= '<td>' . $value["bing"] . '</td>';
+          $htmlString .= '<td>' . $value["yahoo"] . '</td></tr>';
+        }
+        $htmlString .= '</table>';
+
+        require "vendor/autoload.php";
+
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+        $spreadsheet = $reader->loadFromString($htmlString);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('reports/ranking/' . $report_file_name);
+        ?>
+
+<!-- Displays Report as table -->
 <table class="table table-responsible table-striped">
   <thead>
     <tr class="info">
@@ -121,34 +196,29 @@ if ($responseRows[0] != "OK") {
   </thead>
   <tbody>
     <?php
-          while (false !== ($entry = readdir($dir_handle))) {
-            if ($entry == ".." || $entry == ".") {
-              continue;
-            }
-
-            $rankings = json_decode(file_get_contents($pathToExtractedJson . $entry), true); // the json file contains nested json objects, make sure you use associative arrays
-            unlink($pathToExtractedJson . $entry);
-            if (substr_compare("google", $rankings["searchengine"], 0, 6) == 0) {
+            foreach ($ranking_report as $key => $value) {
               ?>
     <tr>
       <td>
-        <?php echo $rankings["keyword"] ?>
+        <?php echo $key ?>
       </td>
-      <?php }
-            if ($rankings["searchengine"] != "") {
-              ?>
       <td>
-        <?php echo count($rankings["rankdata"]) ?>
+        <?php echo $value["google"] ?>
       </td>
-      <?php
-            }
-            if (substr_compare("yahoo", $rankings["searchengine"], 0, 6) == 0) {
-              ?>
+      <td>
+        <?php echo $value["bing"] ?>
+      </td>
+      <td>
+        <?php echo $value["yahoo"] ?>
+      </td>
     </tr>
-    <?php }
-            ?>
     <?php
-          }
+            }
+            ?>
+  </tbody>
+  <table>
+    <?php
+      }
     }
   }
 }

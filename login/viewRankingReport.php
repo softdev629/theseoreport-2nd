@@ -110,6 +110,8 @@ if ($_SESSION['usertype'] != 'Client') {
       }
       req.open("GET", strURL, true);
       req.send();
+      document.getElementById('projectdatediv').innerHTML =
+        '<div class="text-center"><img src="http://localhost/login/images/spinner.gif" alt="Loading..." /></div>'
     }
   }
   </script>

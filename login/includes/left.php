@@ -8,16 +8,15 @@
   </label>
   <ul class="menu">
     <li>
-      <a class="active" href=<?php echo "dashboard.php?account_id=".$_COOKIE['account_id']; ?>>
+      <a class="active" href=<?php echo "dashboard.php?account_id=" . $_COOKIE['account_id']; ?>>
         <i class="fa fa-home"></i>
         <span>Dashboard</span>
       </a>
     </li>
 
-    <?PHP 
-if($_SESSION['usertype']!='Client')
-{
-?>
+    <?PHP
+    if ($_SESSION['usertype'] != 'Client') {
+      ?>
     <li class="sub-menu">
       <a href="user.php?mode=show">
         <i class="fa fa-user"></i>
@@ -90,10 +89,9 @@ if($_SESSION['usertype']!='Client')
 
     <?PHP } ?>
 
-    <?PHP 
-if($_SESSION['usertype']=='Client')
-{
-?>
+    <?PHP
+    if ($_SESSION['usertype'] == 'Client') {
+      ?>
     <li>
       <a href="client_project.php">
         <i class="fa fa-laptop"></i>
@@ -120,9 +118,9 @@ if($_SESSION['usertype']=='Client')
       </a>
     </li>
 
-    <?PHP 
-}
-?>
+    <?PHP
+    }
+    ?>
 
   </ul>
 </section>
@@ -132,16 +130,15 @@ if($_SESSION['usertype']=='Client')
     <div class="leftside-navigation">
       <ul class="sidebar-menu" id="nav-accordion">
         <li>
-          <a class="active" href=<?php echo "dashboard.php?account_id=".$_COOKIE['account_id']; ?>>
+          <a class="active" href=<?php echo "dashboard.php?account_id=" . $_COOKIE['account_id']; ?>>
             <i class="fa fa-home"></i>
             <span>Dashboard</span>
           </a>
         </li>
 
-        <?PHP 
-if($_SESSION['usertype']!='Client')
-{
-?>
+        <?PHP
+        if ($_SESSION['usertype'] != 'Client') {
+          ?>
         <li class="sub-menu">
           <a href="javascript:;">
             <i class="fa fa-user"></i>
@@ -207,27 +204,26 @@ if($_SESSION['usertype']!='Client')
           </a>
         </li>
 
-        <li>
-          <a href="vendasta.php">
-            <i class="fa fa-book"></i>
-            <span>VENDASTA PURCHASE</span>
-          </a>
-        </li>
+        <!-- <li>
+            <a href="vendasta.php">
+              <i class="fa fa-book"></i>
+              <span>VENDASTA PURCHASE</span>
+            </a>
+          </li>
 
 
-        <li>
-          <a href="vendasta-cancellation.php">
-            <i class="fa fa-book"></i>
-            <span>VENDASTA CANCELLATION</span>
-          </a>
-        </li>
+          <li>
+            <a href="vendasta-cancellation.php">
+              <i class="fa fa-book"></i>
+              <span>VENDASTA CANCELLATION</span>
+            </a>
+          </li> -->
 
         <?PHP } ?>
 
-        <?PHP 
-if($_SESSION['usertype']=='Client')
-{
-?>
+        <?PHP
+        if ($_SESSION['usertype'] == 'Client') {
+          ?>
         <li>
           <a href="client_project.php">
             <i class="fa fa-laptop"></i>
@@ -254,9 +250,9 @@ if($_SESSION['usertype']=='Client')
           </a>
         </li>
 
-        <?PHP 
-}
-?>
+        <?PHP
+        }
+        ?>
       </ul>
     </div>
     <!-- sidebar menu end-->

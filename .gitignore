@@ -1,2 +1,4 @@
 *.zip
 /vendor
+/node_modules
+.gitignore

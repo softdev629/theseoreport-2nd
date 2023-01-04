@@ -14,10 +14,9 @@ require_once __DIR__ . '/includes/init-session.php';
 
   <title>Upload Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="stylesheet" href="<?PHP echo $website_url; ?>/css/bootstrap.min.css">
-  <link href="<?PHP echo $website_url; ?>/css/style.css" rel='stylesheet' type='text/css' />
-  <link href="<?PHP echo $website_url; ?>/css/style-responsive.css" rel="stylesheet" />
+  <link rel="stylesheet" href="http://localhost/login/css/bootstrap.min.css">
+  <link href="http://localhost/login/css/style.css" rel='stylesheet' type='text/css' />
+  <link href="http://localhost/login/css/style-responsive.css" rel="stylesheet" />
   <link href="http://localhost/login/css/font-awesome.css" rel="stylesheet">
 </head>
 
@@ -27,7 +26,9 @@ require_once __DIR__ . '/includes/init-session.php';
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#"><?php echo $_GET['title'] ?></a>
+          <a class="navbar-brand" href="#">
+            <?php echo $_GET['title'] ?>
+          </a>
         </div>
         <ul class="nav navbar-nav navbar-right">
           <!---- Download Icon ---->
@@ -47,12 +48,11 @@ require_once __DIR__ . '/includes/init-session.php';
       <?php
       // (A) PHPSPREADSHEET TO LOAD EXCEL FILES
       require "vendor/autoload.php";
-      
+
       $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-      // die($website_url ."/reports/". $_GET["path"]);
-      $spreadsheet = $reader->load("reports/". $_GET["path"]);
+      $spreadsheet = $reader->load("reports/" . $_GET["path"]);
       $worksheet = $spreadsheet->getActiveSheet();
-      
+
       // (B) LOOP THROUGH ROWS OF CURRENT WORKSHEET
       foreach ($worksheet->getRowIterator() as $row) {
         // (B1) READ CELLS
@@ -61,10 +61,12 @@ require_once __DIR__ . '/includes/init-session.php';
 
         // (B2) OUTPUT HTML
         echo "<tr>";
-        foreach ($cellIterator as $cell) { echo "<td>". $cell->getValue() ."</td>"; }
+        foreach ($cellIterator as $cell) {
+          echo "<td>" . $cell->getValue() . "</td>";
+        }
         echo "</tr>";
       }
-    ?>
+      ?>
     </table>
   </div>
 
