@@ -59,10 +59,32 @@ require_once __DIR__ . '/includes/init-session.php';
         $cellIterator = $row->getCellIterator();
         $cellIterator->setIterateOnlyExistingCells(false);
 
-        // (B2) OUTPUT HTML
-        echo "<tr>";
+        // Checkes entire row is empty
+        $flag = 0;
         foreach ($cellIterator as $cell) {
+          if ($cell->getValue() == 'S. No.') {
+            $flag = 2;
+            break;
+          }
+          if ($cell->getValue() != '') {
+            $flag = 1;
+            break;
+          }
+        }
+        if ($flag == 0)
+          continue;
+
+        // (B2) OUTPUT HTML
+        if ($flag == 2)
+          echo "<tr class='bg-info' style='font-weight: bold' >";
+        else
+          echo "<tr>";
+        $flag = 0;
+        foreach ($cellIterator as $cell) {
+          if ($flag > 5)
+            break;
           echo "<td>" . $cell->getValue() . "</td>";
+          ++$flag;
         }
         echo "</tr>";
       }
