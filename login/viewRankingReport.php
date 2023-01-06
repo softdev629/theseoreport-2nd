@@ -96,13 +96,13 @@ if ($_SESSION['usertype'] != 'Client') {
         if (req.readyState == 4) {
           if (req.status == 200) {
             document.getElementById('projectdatediv').innerHTML = req.responseText;
-            new TomSelect("#select-date", {
-              create: false,
-              sortField: {
-                field: "text",
-                direction: "desc"
-              }
-            });
+            // new TomSelect("#select-date", {
+            //   create: false,
+            //   sortField: {
+            //     field: "text",
+            //     direction: "desc"
+            //   }
+            // });
           } else {
             alert("There was a problem while using XMLHTTP:\n" + req.statusText);
           }

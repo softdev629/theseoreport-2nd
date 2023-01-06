@@ -12,12 +12,16 @@ if ($pid == '') {
 }
 $sql = mysqli_query($link, "select * from rl_projects where id='" . $pid . "'");
 $sql_data = mysqli_fetch_array($sql);
-$projectName = $sql_data['projectName'] . '.com';
+$projectName = $sql_data['projectName'];
 $token = $awr_api_token;
 
 // Gets all dates of this project from awr API
 $url = "https://api.awrcloud.com/v2/get.php?action=get_dates&token=" . $token . "&project=" . $projectName;
 $response = json_decode(file_get_contents($url), true);
+if ($response["code"] != 0) {
+  echo "This project doesn't have any history dates!!!";
+  return;
+}
 $dates = $response["details"]["dates"]; // all date arrays
 
 $last_update_date = $dates[count($dates) - 1]["date"];
@@ -57,7 +61,7 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
   }
   fclose($tempZip);
   fclose($urlHandle);
-
+  // print_r("step 1");
   // zip file extract
   $pathToExtractedJson = "reports/jsons/";
   $zip = new ZipArchive;
@@ -67,7 +71,8 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
   } else { //zip file extract success
     $zip->extractTo($pathToExtractedJson);
     $zip->close();
-
+    unlink("tempfile.zip");
+    // print_r("step 2");
     $dir_handle = opendir($pathToExtractedJson);
     // stores information as array
     $visibility_report = array(); //chosen date
@@ -75,14 +80,14 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
       if ($entry == ".." || $entry == ".") {
         continue;
       }
-
+      // print_r("step 3");
       // (A) PHPSPREADSHEET TO LOAD EXCEL FILES
       require "vendor/autoload.php";
 
       $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
       $spreadsheet = $reader->load($pathToExtractedJson . $entry);
       $worksheet = $spreadsheet->getActiveSheet();
-
+      // print_r("step 4");
       // (B) LOOP THROUGH ROWS OF CURRENT WORKSHEET
       foreach ($worksheet->getRowIterator() as $row) {
         // (B1) READ CELLS
@@ -101,10 +106,11 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
           ++$flag;
         }
       }
-
+      // print_r("step 5");
       // removes json file
       unlink($pathToExtractedJson . $entry);
     }
+    closedir($dir_handle);
   }
 }
 ?>
@@ -154,7 +160,7 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
   <!-- chosen date div -->
   <div class="col-md-4" style="padding: 15px; background-color: #939597;">
     <strong class="p-2">Current Report</strong>
-    <p style="padding: 6px;">
+    <p>
       <?php
       echo date_format(date_create($chosen_date), 'm-d-Y');
       ?>
@@ -163,7 +169,7 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
   <!-- next report date div -->
   <div class="col-md-4" style="padding: 15px; background-color: #A09998;">
     <strong>Next Report</strong>
-    <p style="padding: 6px;">
+    <p>
       <?php
       echo date_format($next_date, 'm-d-Y');
       ?>
@@ -201,31 +207,34 @@ $previous_report_file_name = $previous_date . "_" . $projectName . ".xlsx";
 $url = "https://api.awrcloud.com/v2/get.php?action=export_ranking&token=" . $awr_api_token . "&project=" . $projectName . "&startDate=" . $previous_date . "&stopDate=" . $chosen_date . "&format=json";
 $rankingResultsResponse = file_get_contents($url);
 $responseRows = json_decode($rankingResultsResponse, true);
+// print_r("step 6");
 // If it has no downloadable url, no result
 if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
   echo "No results for date: " . $date;
 } else {
+  // print_r("step 7");
   // download zip file
-  $urlRequest = $responseRows["details"];
-  $urlHandle = fopen($urlRequest, 'r');
-  $tempZip = fopen("tempfile.zip", "w");
-  while (!feof($urlHandle)) {
-    $readChunk = fread($urlHandle, 1024 * 8);
-    fwrite($tempZip, $readChunk);
+  $urlRequest1 = $responseRows["details"];
+  $urlHandle1 = fopen($urlRequest1, 'r');
+  $tempZip1 = fopen("tempfile1.zip", "w");
+  while (!feof($urlHandle1)) {
+    $readChunk = fread($urlHandle1, 1024 * 8);
+    fwrite($tempZip1, $readChunk);
   }
-  fclose($tempZip);
-  fclose($urlHandle);
-
+  fclose($tempZip1);
+  fclose($urlHandle1);
+  // print_r("step 8");
   // zip file extract
   $pathToExtractedJson = "reports/jsons/";
-  $zip = new ZipArchive;
-  $res = $zip->open("tempfile.zip");
+  $zip1 = new ZipArchive;
+  $res = $zip1->open("tempfile1.zip");
   if ($res === FALSE) { // zip file extract failed
     echo "Could not extract JSON files from the zip archive";
   } else { //zip file extract success
-    $zip->extractTo($pathToExtractedJson);
-    $zip->close();
-
+    $zip1->extractTo($pathToExtractedJson);
+    $zip1->close();
+    unlink("tempfile1.zip");
+    // print_r("step 9");
     $dir_handle = opendir($pathToExtractedJson);
     // stores information as array: we have to split current and previous because of comparision
     $ranking_report = array(); //chosen date
@@ -234,7 +243,7 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
       if ($entry == ".." || $entry == ".") {
         continue;
       }
-
+      // print_r("step 10");
       // the json file contains nested json objects, make sure you use associative arrays
       $rankings = json_decode(file_get_contents($pathToExtractedJson . $entry), true);
 
@@ -276,9 +285,11 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
           }
         }
       }
+      // print_r("step 11");
       // removes json file
       unlink($pathToExtractedJson . $entry);
     }
+    closedir($dir_handle);
     ?>
 
 <!---------------- Displays Report as table -------------------->
