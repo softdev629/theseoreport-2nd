@@ -33,7 +33,7 @@ for ($i = 0; $i < count($dates); $i++) {
       $previous_date = $dates[$i - 1]["date"];
     else // we have no previous date
       $previous_date = $dates[$i]["date"];
-    if ($i != count($dates) - 1) { // we have no next report
+    if ($i == count($dates) - 1) { // we have no next report
       $next_date = date_create($current_date);
       date_add($next_date, date_interval_create_from_date_string('7 days'));
     } else
@@ -94,7 +94,6 @@ $previous_report_file_name = $previous_date . "_" . $projectName . ".xlsx";
 $url = "https://api.awrcloud.com/v2/get.php?action=export_ranking&token=" . $awr_api_token . "&project=" . $projectName . "&startDate=" . $previous_date . "&stopDate=" . $chosen_date . "&format=json";
 $rankingResultsResponse = file_get_contents($url);
 $responseRows = json_decode($rankingResultsResponse, true);
-
 // If it has no downloadable url, no result
 if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
   echo "No results for date: " . $date;
@@ -131,6 +130,7 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
 
       // the json file contains nested json objects, make sure you use associative arrays
       $rankings = json_decode(file_get_contents($pathToExtractedJson . $entry), true);
+
       foreach ($rankings as $ranking_items) {
         $keyword = $ranking_items["keyword"];
         $searchengine = $ranking_items["se"];
@@ -197,22 +197,22 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
       <td>
         <?php
               echo $value["google"];
-              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && $previous_report[$key]["google"] > $value["google"])
-                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . ($previous_report[$key]["google"] - $value["google"]) . "</span>"
+              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && intval($previous_report[$key]["google"]) > intval($value["google"]))
+                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . (intval($previous_report[$key]["google"]) - intval($value["google"])) . "</span>"
                   ?>
       </td>
       <td>
         <?php echo $value["bing"] ?>
         <?php
-              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && $previous_report[$key]["bing"] > $value["bing"])
-                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . ($previous_report[$key]["google"] - $value["google"]) . "</span>"
+              if ($previous_report[$key]["bing"] != '-' && $value["bing"] != '-' && intval($previous_report[$key]["bing"]) > intval($value["bing"]))
+                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . (intval($previous_report[$key]["bing"]) - intval($value["bing"])) . "</span>"
                   ?>
       </td>
       <td>
         <?php echo $value["yahoo"] ?>
         <?php
-              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && $previous_report[$key]["yahoo"] > $value["yahoo"])
-                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . ($previous_report[$key]["google"] - $value["google"]) . "</span>"
+              if ($previous_report[$key]["yahoo"] != '-' && $value["yahoo"] != '-' && intval($previous_report[$key]["yahoo"]) > intval($value["yahoo"]))
+                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . (intval($previous_report[$key]["yahoo"]) - intval($value["yahoo"])) . "</span>"
                   ?>
       </td>
     </tr>
