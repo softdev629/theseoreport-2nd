@@ -40,7 +40,114 @@ for ($i = 0; $i < count($dates); $i++) {
       $next_date = date_create($dates[$i + 1]["date"]);
   }
 }
+
+// export visibility API url in awr
+$url = "https://api.awrcloud.com/v2/get.php?action=visibility_export&project=$projectName&token=$awr_api_token&startDate=$previous_date&stopDate=$chosen_date";
+$visibilityResponse = json_decode(file_get_contents($url), true);
+if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
+  echo "No visibility datas for date: " . $date;
+} else {
+  // download visibility zip file
+  $urlRequest = $visibilityResponse["details"];
+  $urlHandle = fopen($urlRequest, 'r');
+  $tempZip = fopen("tempfile.zip", "w");
+  while (!feof($urlHandle)) {
+    $readChunk = fread($urlHandle, 1024 * 8);
+    fwrite($tempZip, $readChunk);
+  }
+  fclose($tempZip);
+  fclose($urlHandle);
+
+  // zip file extract
+  $pathToExtractedJson = "reports/jsons/";
+  $zip = new ZipArchive;
+  $res = $zip->open("tempfile.zip");
+  if ($res === FALSE) { // zip file extract failed
+    echo "Could not extract JSON files from the zip archive";
+  } else { //zip file extract success
+    $zip->extractTo($pathToExtractedJson);
+    $zip->close();
+
+    $dir_handle = opendir($pathToExtractedJson);
+    // stores information as array
+    $visibility_report = array(); //chosen date
+    while (false !== ($entry = readdir($dir_handle))) {
+      if ($entry == ".." || $entry == ".") {
+        continue;
+      }
+
+      // (A) PHPSPREADSHEET TO LOAD EXCEL FILES
+      require "vendor/autoload.php";
+
+      $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+      $spreadsheet = $reader->load($pathToExtractedJson . $entry);
+      $worksheet = $spreadsheet->getActiveSheet();
+
+      // (B) LOOP THROUGH ROWS OF CURRENT WORKSHEET
+      foreach ($worksheet->getRowIterator() as $row) {
+        // (B1) READ CELLS
+        $cellIterator = $row->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+
+        $flag = 0;
+        foreach ($cellIterator as $cell) {
+          if ($flag > 3)
+            break;
+          if (substr_compare($cell->getValue(), "Top", 0, 3) == 0 || substr_compare($cell->getValue(), "Move", 0, 3) == 0) {
+            $cellValue = $worksheet->getCell("B" . $cell->getRow())->getValue();
+            $cellData = explode(" ", $cellValue);
+            $visibility_report[$cell->getValue()] = $cellData[0];
+          }
+          ++$flag;
+        }
+      }
+
+      // removes json file
+      unlink($pathToExtractedJson . $entry);
+    }
+  }
+}
 ?>
+
+<!--------------------- visibility table --------------------->
+<div class="row text-center">
+  <table class="table table-responsible">
+    <thead>
+      <tr class="bg-warning">
+        <th>Top 3</th>
+        <th>Top 5</th>
+        <th>Top 10</th>
+        <th>Top 20</th>
+        <th>Top 30</th>
+        <th>Moved Up</th>
+        <th>Moved Down</th>
+        <th>Total Move</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <?php echo $visibility_report["Top 3"] ?>
+        </td>
+        <td><?php echo $visibility_report["Top 5"] ?></td>
+        <td>
+          <?php echo $visibility_report["Top 10"] ?>
+        </td>
+        <td><?php echo $visibility_report["Top 20"] ?></td>
+        <td>
+          <?php echo $visibility_report["Top 30"] ?>
+        </td>
+        <td style="color: #27c24c">+ <?php echo $visibility_report["Moved Up"] ?></td>
+        <td style="color: #f05050">
+          - <?php echo $visibility_report["Moved Down"] ?>
+        </td>
+        <td>
+          <?php echo intval($visibility_report["Moved Up"]) - intval($visibility_report["Moved Down"]) ?>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <!------------------ ranking report header -------------------->
 <div class="row text-center">
