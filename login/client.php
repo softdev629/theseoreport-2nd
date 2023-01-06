@@ -16,7 +16,7 @@ if ($_SESSION['usertype'] != 'Administrator') {
 <?PHP
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $chk_user = $_POST['email'];
-    $chkuser = mysqli_query($link, "sELECT * FROM rl_login where email='$chk_user' ");
+    $chkuser = mysqli_query($link, "SELECT * FROM rl_login where email='$chk_user' ");
     $chk_num = @mysqli_num_rows($chkuser);
 
     if ($chk_num == '0') {
@@ -29,10 +29,24 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-
-    mysqli_query($link, "update rl_login SET password='" . $_POST['password'] . "',name='" . $_POST['name'] . "',phone='" . $_POST['phone'] . "',address='" . $_POST['address'] . "',city='" . $_POST['city'] . "',state='" . $_POST['state'] . "',country='" . $_POST['country'] . "',zip='" . $_POST['zip'] . "',comments='" . $_POST['comments'] . "',status='" . $_POST['status'] . "',dateModify='" . $today . "' where id='" . $_POST['uid'] . "'");
-
+  // $chkuser = mysqli_query($link, "SELECT * FROM rl_login where id='" . $_POST['uid']. "' ");
+  // dirname(__FILE__)
+  $target_dir = "images/logos/";
+  $target_file = $target_dir . time() . basename($_FILES["logo"]["name"]);
+  $uploadOk = 1;
+  
+  // Check file size
+  if ($_FILES["logo"]["size"] > 500000) $uploadOk = 0;
+  
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+    echo "Upload file failed!!!";
+  } else {// if everything is ok, try to upload file
+    move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file);
+    $target_file = str_replace('images/logos/', '', $target_file);
+    mysqli_query($link, "update rl_login SET password='" . $_POST['password'] . "',name='" . $_POST['name'] . "',phone='" . $_POST['phone'] . "',address='" . $_POST['address'] . "',city='" . $_POST['city'] . "',state='" . $_POST['state'] . "',country='" . $_POST['country'] . "',zip='" . $_POST['zip'] . "',comments='" . $_POST['comments'] . "',status='" . $_POST['status'] . "',dateModify='" . $today . "',logo='". $target_file ."' where id='" . $_POST['uid'] . "'");
     header("location: client.php?mode=show&msg=edited");
+  }
 }
 
 
@@ -63,7 +77,16 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
   <title>Client </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/main.css">
-
+  <script type="text/javascript">
+  const loadFile = function(event) {
+    let reader = new FileReader();
+    reader.onload = () => {
+      let output = document.getElementById('logo-img');
+      output.src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+  }
+  </script>
 
   <?php include("includes/header.php"); ?>
   <!--header end-->
@@ -129,6 +152,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                         style="font-size:19px;">&nbsp <i class="fa fa-sort-alpha-asc text-success"
                           title="Ascending Order"></i></span></a>
                   </th>
+                  <th>LOGO</th>
                   <th>Username / Email
                     <a
                       href="client.php?orderby=DESC&page=<?php echo ""; ?>&usertype=<?php echo ""; ?>&searchkeyword=<?php echo $searchkeyword; ?>&orderfield=email&mode=show"><span
@@ -180,6 +204,9 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                   </td>
                   <td>
                     <?PHP echo $user_data['name']; ?>
+                  </td>
+                  <td><img src=<?php echo "$website_url/images/logos/" . $user_data['logo'] ?> width=50 height=50
+                      alt="logo" />
                   </td>
                   <td>
                     <?PHP echo $user_data['email']; ?>
@@ -246,7 +273,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
               <?PHP echo $message; ?>
             </div>
             <form class="form-horizontal bucket-form login100-form validate-form" method="post"
-              action="client.php?action=add">
+              action="client.php?action=add" enctype="multipart/form-data">
 
               <div class="form-group">
                 <label class="col-sm-3 control-label col-lg-3">Name</label>
@@ -398,7 +425,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
               <?PHP echo $message; ?>
             </div>
             <form class="form-horizontal bucket-form login100-form validate-form" method="post"
-              action="client.php?action=edit">
+              action="client.php?action=edit" enctype="multipart/form-data">
 
               <div class="form-group">
                 <label class="col-sm-3 control-label col-lg-3">Name</label>
@@ -444,7 +471,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                 <div class="col-lg-6">
                   <div class="input-group m-bot15">
                     <span class="input-group-addon btn-white"><i class="fa fa-phone text-inverse"></i></span>
-                    <div class="wrap-input100 validate-input m-b-23" data-validate="Phone is required">
+                    <div class="wrap-input100 m-b-23">
                       <input type="text" class="form-control input100" name="phone"
                         value="<?PHP echo $user_data['phone']; ?>">
                     </div>
@@ -457,7 +484,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                 <div class="col-lg-6">
                   <div class="input-group m-bot15">
                     <span class="input-group-addon btn-white"><i class="fa fa-building text-inverse"></i></span>
-                    <div class="wrap-input100 validate-input m-b-23" data-validate="Address is required">
+                    <div class="wrap-input100 m-b-23">
                       <input type="text" class="form-control input100" name="address"
                         value="<?PHP echo $user_data['address']; ?>">
                     </div>
@@ -505,6 +532,19 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                 </div>
               </div>
 
+              <!-- This is client LOGO upload part -->
+              <div class="form-group text-center">
+                <label class="col-sm-3 control-label col-lg-3">LOGO</label>
+                <div class="col-lg-6">
+                  <div class="input-group m-bot15">
+                    <span class="input-group-addon btn-white"><i class="fa fa-file-image-o text-inverse"></i></span>
+                    <input type="file" class="form-control" name="logo" onchange="loadFile(event)">
+                  </div>
+                </div>
+                <img alt="LOGO" src="<?php echo $website_url . '/images/logos/' . $user_data['logo'] ?>"
+                  id="logo-img" />
+              </div>
+
               <div class="form-group">
                 <label class="col-sm-3 control-label col-lg-3">Comments</label>
                 <div class="col-lg-6">
@@ -535,7 +575,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'exist') {
                 <div class="col-lg-3">&nbsp;</div>
                 <div class="col-lg-6">
                   <input type="hidden" name="uid" value="<?PHP echo $user_data['id']; ?>">
-                  <button type="submit" class="btn btn-info">Submit</button>
+                  <button type="submit" class="btn btn-info" name="submit">Submit</button>
                 </div>
               </div>
 

@@ -1,16 +1,15 @@
 <?PHP
 session_start();
 
-include("includes/common.php");
-include("includes/database.php");
-include("includes/init-session.php");
+include("includes/common.php"); // loads constant variables
+include("includes/database.php"); // connect to database
+include("includes/init-session.php"); // session init
 
 $pid = $_GET['pid']; // project ID
 $cid = $_SESSION['UID']; // User ID
 if ($pid == '') {
   exit;
 }
-
 $sql = mysqli_query($link, "select * from rl_projects where id='" . $pid . "'");
 $sql_data = mysqli_fetch_array($sql);
 $projectName = $sql_data['projectName'] . '.com';
@@ -175,7 +174,7 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
     }
     ?>
 
-<!-- Displays Report as table -->
+<!---------------- Displays Report as table -------------------->
 <table class="table table-responsible table-striped">
   <thead>
     <tr class="info">
@@ -196,13 +195,25 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
         <?php echo $key ?>
       </td>
       <td>
-        <?php echo $value["google"] ?>
+        <?php
+              echo $value["google"];
+              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && $previous_report[$key]["google"] > $value["google"])
+                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . ($previous_report[$key]["google"] - $value["google"]) . "</span>"
+                  ?>
       </td>
       <td>
         <?php echo $value["bing"] ?>
+        <?php
+              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && $previous_report[$key]["bing"] > $value["bing"])
+                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . ($previous_report[$key]["google"] - $value["google"]) . "</span>"
+                  ?>
       </td>
       <td>
         <?php echo $value["yahoo"] ?>
+        <?php
+              if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && $previous_report[$key]["yahoo"] > $value["yahoo"])
+                echo "<span class='badge bg-info'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . ($previous_report[$key]["google"] - $value["google"]) . "</span>"
+                  ?>
       </td>
     </tr>
     <?php
