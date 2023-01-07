@@ -116,26 +116,18 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
 ?>
 
 <!--------------------- visibility table --------------------->
-<div class="row text-center">
+<div class="col-md-6 text-center col-md-offset-3">
   <table class="table table-responsible">
     <thead>
       <tr class="bg-warning">
-        <th>Top 3</th>
-        <th>Top 5</th>
         <th>Top 10</th>
         <th>Top 20</th>
         <th>Top 30</th>
-        <th>Moved Up</th>
-        <th>Moved Down</th>
         <th>Total Move</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>
-          <?php echo $visibility_report["Top 3"] ?>
-        </td>
-        <td><?php echo $visibility_report["Top 5"] ?></td>
         <td>
           <?php echo $visibility_report["Top 10"] ?>
         </td>
@@ -143,10 +135,10 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
         <td>
           <?php echo $visibility_report["Top 30"] ?>
         </td>
-        <td style="color: #27c24c">+ <?php echo $visibility_report["Moved Up"] ?></td>
+        <!-- <td style="color: #27c24c">+ <?php echo $visibility_report["Moved Up"] ?></td>
         <td style="color: #f05050">
           - <?php echo $visibility_report["Moved Down"] ?>
-        </td>
+        </td> -->
         <td>
           <?php echo intval($visibility_report["Moved Up"]) - intval($visibility_report["Moved Down"]) ?>
         </td>
@@ -180,15 +172,15 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
     <strong>Report History</strong><br>
     <select id="select-date" placeholder="Choose Date"
       onchange="getProjectDate('findreport3.php?pid=' + <?php echo $pid ?> + '&date=' + this.value)"
-      class="col-md-6 col-md-offset-3">
+      class="col-md-6 col-md-offset-3" style="font-family: Poppins-Regular; font-size: 14px">
       <option value="">Choose Date</option>
       <?php
       // puts all dates here to select past date
       foreach ($dates as $dateAndDepth) {
         $date = $dateAndDepth["date"];
         ?>
-      <option value=<?php echo $date ?>>
-        <?php echo $date ?>
+      <option value=<?php echo $date ?> <?php echo $date == $chosen_date ? 'selected="selected"' : '' ?>>
+        <?php echo date_format(date_create($date), 'm-d-Y') ?>
       </option>
       <?php
       }

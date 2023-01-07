@@ -15,9 +15,9 @@ require_once __DIR__ . '/includes/init-session.php';
   <title>Upload Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://localhost/login/css/bootstrap.min.css">
-  <link href="http://localhost/login/css/style.css" rel='stylesheet' type='text/css' />
-  <link href="http://localhost/login/css/style-responsive.css" rel="stylesheet" />
-  <link href="http://localhost/login/css/font-awesome.css" rel="stylesheet">
+  <link href="<?php echo $website_url ?>/css/style.css" rel='stylesheet' type='text/css' />
+  <link href="<?php echo $website_url ?>/css/style-responsive.css" rel="stylesheet" />
+  <link href="<?php echo $website_url ?>/css/font-awesome.css" rel="stylesheet">
 </head>
 
 <body>
