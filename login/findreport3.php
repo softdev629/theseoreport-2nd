@@ -71,7 +71,7 @@ if ($visibilityResponse["code"] != 0 && $visibilityResponse["code"] != 10) {
   } else { //zip file extract success
     $zip->extractTo($pathToExtractedJson);
     $zip->close();
-    unlink("tempfile.zip");
+    // unlink("tempfile.zip");
     // print_r("step 2");
     $dir_handle = opendir($pathToExtractedJson);
     // stores information as array
@@ -225,7 +225,7 @@ if ($responseRows["code"] != 0 && $responseRows["code"] != 10) {
   } else { //zip file extract success
     $zip1->extractTo($pathToExtractedJson);
     $zip1->close();
-    unlink("tempfile1.zip");
+    // unlink("tempfile1.zip");
     // print_r("step 9");
     $dir_handle = opendir($pathToExtractedJson);
     // stores information as array: we have to split current and previous because of comparision

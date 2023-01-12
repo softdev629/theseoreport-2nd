@@ -23,60 +23,60 @@ require_once __DIR__ . '/includes/init-session.php';
   <?php include("includes/left.php"); ?>
 
   <?PHP
-    $total_client = mysqli_query($link, "select * from rl_login where userType='Client' and id!=1");
-    $total_client_numee = mysqli_num_rows($total_client);
+  $total_client = mysqli_query($link, "select * from rl_login where userType='Client' and id!=1");
+  $total_client_numee = mysqli_num_rows($total_client);
 
-    $total_user = mysqli_query($link, "select * from rl_login where userType!='Client' and id!=1");
-    $total_user_numee = mysqli_num_rows($total_user);
+  $total_user = mysqli_query($link, "select * from rl_login where userType!='Client' and id!=1");
+  $total_user_numee = mysqli_num_rows($total_user);
 
-    $total_project = mysqli_query($link, "select * from rl_projects where stopstatus=1");
-    $total_project_numee = mysqli_num_rows($total_project);
+  $total_project = mysqli_query($link, "select * from rl_projects where stopstatus=1");
+  $total_project_numee = mysqli_num_rows($total_project);
 
-    $total_project_stop = mysqli_query($link, "select * from rl_projects where stopstatus=0");
-    $total_project_stop_numee = mysqli_num_rows($total_project_stop);
+  $total_project_stop = mysqli_query($link, "select * from rl_projects where stopstatus=0");
+  $total_project_stop_numee = mysqli_num_rows($total_project_stop);
 
-    $total_client_project = mysqli_query($link, "select * from rl_projects where cid='" . $_SESSION['UID'] . "'");
-    $total_client_project_numee = mysqli_num_rows($total_client_project);
+  $total_client_project = mysqli_query($link, "select * from rl_projects where cid='" . $_SESSION['UID'] . "'");
+  $total_client_project_numee = mysqli_num_rows($total_client_project);
 
-    $total_linking_report = mysqli_query($link, "select * from rl_report where cid='" . $_SESSION['UID'] . "' and reportname='Linking Report'");
-    $total_linking_report_numee = mysqli_num_rows($total_linking_report);
+  $total_linking_report = mysqli_query($link, "select * from rl_report where cid='" . $_SESSION['UID'] . "' and reportname='Linking Report'");
+  $total_linking_report_numee = mysqli_num_rows($total_linking_report);
 
-    $total_onsite_report = mysqli_query($link, "select * from rl_report where cid='" . $_SESSION['UID'] . "' and reportname='Onsite Report'");
-    $total_onsite_report_numee = mysqli_num_rows($total_onsite_report);
+  $total_onsite_report = mysqli_query($link, "select * from rl_report where cid='" . $_SESSION['UID'] . "' and reportname='Onsite Report'");
+  $total_onsite_report_numee = mysqli_num_rows($total_onsite_report);
 
-    $total_ranking_report = mysqli_query($link, "select * from rl_report where cid='" . $_SESSION['UID'] . "' and reportname='Ranking Report'");
-    $total_ranking_report_numee = mysqli_num_rows($total_ranking_report);
-
-
-
-    $txt = '';
-    $total_client_project_assign = mysqli_query($link, "select * from rl_projects_assign where cid='" . $_SESSION['UID'] . "'");
-    $total_client_project_assign_numee = mysqli_num_rows($total_client_project_assign);
-    while ($total_client_project_assign_value = mysqli_fetch_array($total_client_project_assign)) {
-        $txt .= "pid='";
-        $txt .= $total_client_project_assign_value['pid'];
-        $txt .= "' OR ";
-    }
-    $txt .= "pid=0";
+  $total_ranking_report = mysqli_query($link, "select * from rl_report where cid='" . $_SESSION['UID'] . "' and reportname='Ranking Report'");
+  $total_ranking_report_numee = mysqli_num_rows($total_ranking_report);
 
 
-    $total_linking_report_assign = mysqli_query($link, "select * from rl_report where ($txt)  and reportname='Linking Report'");
-    $total_linking_report_assign_numee = mysqli_num_rows($total_linking_report_assign);
 
-    $total_onsite_report_assign = mysqli_query($link, "select * from rl_report where($txt) and reportname='Onsite Report'");
-    $total_onsite_report_assign_numee = mysqli_num_rows($total_onsite_report_assign);
+  $txt = '';
+  $total_client_project_assign = mysqli_query($link, "select * from rl_projects_assign where cid='" . $_SESSION['UID'] . "'");
+  $total_client_project_assign_numee = mysqli_num_rows($total_client_project_assign);
+  while ($total_client_project_assign_value = mysqli_fetch_array($total_client_project_assign)) {
+    $txt .= "pid='";
+    $txt .= $total_client_project_assign_value['pid'];
+    $txt .= "' OR ";
+  }
+  $txt .= "pid=0";
 
-    $total_ranking_report_assign = mysqli_query($link, "select * from rl_report where ($txt) and reportname='Ranking Report'");
-    $total_ranking_report_assign_numee = mysqli_num_rows($total_ranking_report_assign);
-    ?>
+
+  $total_linking_report_assign = mysqli_query($link, "select * from rl_report where ($txt)  and reportname='Linking Report'");
+  $total_linking_report_assign_numee = mysqli_num_rows($total_linking_report_assign);
+
+  $total_onsite_report_assign = mysqli_query($link, "select * from rl_report where($txt) and reportname='Onsite Report'");
+  $total_onsite_report_assign_numee = mysqli_num_rows($total_onsite_report_assign);
+
+  $total_ranking_report_assign = mysqli_query($link, "select * from rl_report where ($txt) and reportname='Ranking Report'");
+  $total_ranking_report_assign_numee = mysqli_num_rows($total_ranking_report_assign);
+  ?>
   <!--sidebar end-->
   <!--main content start-->
   <section id="main-content">
     <section class="wrapper">
 
       <?PHP
-            if ($_SESSION['usertype'] == 'Client') {
-            ?>
+      if ($_SESSION['usertype'] == 'Client') {
+        ?>
       <div class="market-updates">
         <a href="client_project.php">
           <div class="col-md-6 market-update-gd" style="margin-bottom:20px;">
@@ -146,11 +146,11 @@ require_once __DIR__ . '/includes/init-session.php';
         <!-- //market-->
 
         <div class="clearfix"> </div>
-        <?PHP  } ?>
+        <?PHP } ?>
 
         <?PHP
-                if ($_SESSION['usertype'] != 'Client') {
-                ?>
+        if ($_SESSION['usertype'] != 'Client') {
+          ?>
 
         <!-- //market-->
         <div class="market-updates">
@@ -252,100 +252,100 @@ require_once __DIR__ . '/includes/init-session.php';
         <!-- //graph-->
 
         <!-- tasks 
-			<div class="agile-last-grids">
-            	<div class="col-md-4 agile-last-left agile-last-middle">
-					<div class="agile-last-grid">
-						<div class="area-grids-heading">
-							<h3>Daily</h3>
-						</div>
-						<div id="graph8"></div>
-						<script>
-						/* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
-						var day_data = [
-						  {"period": "2019-10-18", "licensed": 12},
-						  {"period": "2019-09-19", "licensed": 3},
-						  {"period": "2019-09-20", "licensed": 4},
-						  {"period": "2019-09-21", "licensed": 7},
-						  {"period": "2019-09-22", "licensed": 9},
-						  {"period": "2019-09-23", "licensed": 4},
-						  {"period": "2019-09-24", "licensed": 1},
-						  {"period": "2019-09-25", "licensed": 3},
-						  {"period": "2019-09-26", "licensed": 9},
-						  {"period": "2019-09-27", "licensed": 4}
-						];
-						Morris.Bar({
-						  element: 'graph8',
-						  data: day_data,
-						  xkey: 'period',
-						  ykeys: ['licensed'],
-						  labels: ['No. of Projects'],
-						  xLabelAngle: 60
-						});
-						</script>
-					</div>
-				</div>
+            <div class="agile-last-grids">
+                    <div class="col-md-4 agile-last-left agile-last-middle">
+                <div class="agile-last-grid">
+                  <div class="area-grids-heading">
+                    <h3>Daily</h3>
+                  </div>
+                  <div id="graph8"></div>
+                  <script>
+                  /* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
+                  var day_data = [
+                    {"period": "2019-10-18", "licensed": 12},
+                    {"period": "2019-09-19", "licensed": 3},
+                    {"period": "2019-09-20", "licensed": 4},
+                    {"period": "2019-09-21", "licensed": 7},
+                    {"period": "2019-09-22", "licensed": 9},
+                    {"period": "2019-09-23", "licensed": 4},
+                    {"period": "2019-09-24", "licensed": 1},
+                    {"period": "2019-09-25", "licensed": 3},
+                    {"period": "2019-09-26", "licensed": 9},
+                    {"period": "2019-09-27", "licensed": 4}
+                  ];
+                  Morris.Bar({
+                    element: 'graph8',
+                    data: day_data,
+                    xkey: 'period',
+                    ykeys: ['licensed'],
+                    labels: ['No. of Projects'],
+                    xLabelAngle: 60
+                  });
+                  </script>
+                </div>
+              </div>
             
-				<div class="col-md-4 agile-last-left">
-					<div class="agile-last-grid">
-						<div class="area-grids-heading">
-							<h3>Monthly</h3>
-						</div>
-						<div id="graph7"></div>
-						<script>
-						// This crosses a DST boundary in the UK.
-						Morris.Area({
-						  element: 'graph7',
-						  data: [
-							{x: '2019-04', y: 25},
-							{x: '2019-05', y: 3},
-							{x: '2019-06', y: 15},
-							{x: '2019-07', y: 35},
-							{x: '2019-08', y: 7},
-							{x: '2019-09', y: 38}
-						  ],
-						  xkey: 'x',
-						  ykeys: ['y'],
-						  labels: ['No. of Projects']
-						});
-						</script>
+              <div class="col-md-4 agile-last-left">
+                <div class="agile-last-grid">
+                  <div class="area-grids-heading">
+                    <h3>Monthly</h3>
+                  </div>
+                  <div id="graph7"></div>
+                  <script>
+                  // This crosses a DST boundary in the UK.
+                  Morris.Area({
+                    element: 'graph7',
+                    data: [
+                    {x: '2019-04', y: 25},
+                    {x: '2019-05', y: 3},
+                    {x: '2019-06', y: 15},
+                    {x: '2019-07', y: 35},
+                    {x: '2019-08', y: 7},
+                    {x: '2019-09', y: 38}
+                    ],
+                    xkey: 'x',
+                    ykeys: ['y'],
+                    labels: ['No. of Projects']
+                  });
+                  </script>
 
-					</div>
-				</div>
-				
-				<div class="col-md-4 agile-last-left agile-last-right">
-					<div class="agile-last-grid">
-						<div class="area-grids-heading">
-							<h3>Yearly</h3>
-						</div>
-						<div id="graph9"></div>
-						<script>
-						var day_data = [
-						  {"elapsed": "2011", "value": 250},
-						  {"elapsed": "2012", "value": 25},
-						  {"elapsed": "2013", "value": 150},
-						  {"elapsed": "2014", "value": 300},
-						  {"elapsed": "2015", "value": 28},
-						  {"elapsed": "2016", "value": 50},
-						  {"elapsed": "2017", "value": 320},
-						  {"elapsed": "2018", "value": 250}
-						];
-						Morris.Line({
-						  element: 'graph9',
-						  data: day_data,
-						  xkey: 'elapsed',
-						  ykeys: ['value'],
-						  labels: ['No. of Projects'],
-						  parseTime: false
-						});
-						</script>
+                </div>
+              </div>
+        
+              <div class="col-md-4 agile-last-left agile-last-right">
+                <div class="agile-last-grid">
+                  <div class="area-grids-heading">
+                    <h3>Yearly</h3>
+                  </div>
+                  <div id="graph9"></div>
+                  <script>
+                  var day_data = [
+                    {"elapsed": "2011", "value": 250},
+                    {"elapsed": "2012", "value": 25},
+                    {"elapsed": "2013", "value": 150},
+                    {"elapsed": "2014", "value": 300},
+                    {"elapsed": "2015", "value": 28},
+                    {"elapsed": "2016", "value": 50},
+                    {"elapsed": "2017", "value": 320},
+                    {"elapsed": "2018", "value": 250}
+                  ];
+                  Morris.Line({
+                    element: 'graph9',
+                    data: day_data,
+                    xkey: 'elapsed',
+                    ykeys: ['value'],
+                    labels: ['No. of Projects'],
+                    parseTime: false
+                  });
+                  </script>
 
-					</div>
-				</div>
-				<div class="clearfix"> </div>
-			</div>
-		<!-- //tasks -->
+                </div>
+              </div>
+              <div class="clearfix"> </div>
+            </div>
+          <!-- //tasks -->
 
-        <?PHP  } ?>
+        <?PHP } ?>
 
 
 

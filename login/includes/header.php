@@ -29,7 +29,7 @@ function hideURLbar() {
 <!-- //font-awesome icons -->
 <script src="<?PHP echo $website_url; ?>/js/jquery2.0.3.min.js"></script>
 <script src="<?PHP echo $website_url; ?>/js/raphael-min.js"></script>
-<script src="<?PHP echo $website_url; ?>/js/morris.js"></script>
+<!-- <script src="<?PHP echo $website_url; ?>/js/morris.js"></script> -->
 </head>
 
 <body>
@@ -38,15 +38,15 @@ function hideURLbar() {
     <header class="top-nav-element header fixed-top clearfix">
 
       <?PHP
-            $profile = mysqli_query($link, "select * from rl_login where id='" . $_SESSION['UID'] . "' and status=1 ");
-            $profile_data = mysqli_fetch_array($profile);
+      $profile = mysqli_query($link, "select * from rl_login where id='" . $_SESSION['UID'] . "' and status=1 ");
+      $profile_data = mysqli_fetch_array($profile);
 
-            if ($profile_data['imgPath'] == "") {
-                $pimg = '1.png';
-            } else {
-                $pimg = $profile_data['imgPath'];
-            }
-            ?>
+      if ($profile_data['imgPath'] == "") {
+        $pimg = '1.png';
+      } else {
+        $pimg = $profile_data['imgPath'];
+      }
+      ?>
       <!--logo start-->
       <div class="brand">
         <?php if ($_SESSION['usertype'] == 'Client') { ?>

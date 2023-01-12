@@ -7,9 +7,11 @@ if (!array_key_exists($COOKIE_NAME, $_COOKIE) || $_COOKIE[$COOKIE_NAME] == '[log
 
 $cookie = json_decode(base64_decode($_COOKIE[$COOKIE_NAME]));
 
-if (!is_object($cookie)
+if (
+    !is_object($cookie)
     || !property_exists($cookie, 'expiry')
-    || !property_exists($cookie, 'login_type')) {
+    || !property_exists($cookie, 'login_type')
+) {
     throw new Exception('something-went-wrong:malformed-cookie');
 }
 
@@ -28,7 +30,7 @@ if ($cookie->login_type == $VENDASTA_SSO_LOGIN_TYPE) {
 
     $provider = new \League\OAuth2\Client\Provider\GenericProvider([
         'urlResourceOwnerDetails' => $oauth_resource_owner_details_endpoint_url,
-        'urlAuthorize' => "$authorization_url?account_id=".$_SESSION['account_id'],
+        'urlAuthorize' => "$authorization_url?account_id=" . $_SESSION['account_id'],
         'urlAccessToken' => $oauth_access_token_endpoint_url,
         'clientSecret' => $oauth_client_secret,
         'clientId' => $oauth_client_id,
@@ -42,5 +44,5 @@ if ($cookie->login_type == $VENDASTA_SSO_LOGIN_TYPE) {
 
     header("Location: $authorizationUrl");
     exit;
-    
+
 }
