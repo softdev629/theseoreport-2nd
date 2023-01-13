@@ -48,7 +48,7 @@ if ($_SESSION['usertype'] != 'Client') {
 <head>
   <title>Ranking Report </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/main.css">
+  <!-- <link rel="stylesheet" href="css/main.css"> -->
   <link href="node_modules/tom-select/dist/css/tom-select.css" rel="stylesheet">
   <script src="node_modules/tom-select/dist/js/tom-select.complete.min.js"></script>
 
