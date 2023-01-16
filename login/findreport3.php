@@ -115,6 +115,80 @@ if ($visibilityResponse["response_code"] != 0 && $visibilityResponse["response_c
 }
 ?>
 
+<!--------------------- visibility table --------------------->
+<div class="col-md-6 text-center col-md-offset-3">
+  <table class="table table-responsible">
+    <thead>
+      <tr class="bg-warning">
+        <th class="text-center">Top 10</th>
+        <th class="text-center">Top 20</th>
+        <th class="text-center">Top 30</th>
+        <th class="text-center">Total Move</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <?php echo $visibility_report["Top 10"] ?>
+        </td>
+        <td><?php echo $visibility_report["Top 20"] ?></td>
+        <td>
+          <?php echo $visibility_report["Top 30"] ?>
+        </td>
+        <!-- <td style="color: #27c24c">+ <?php echo $visibility_report["Moved Up"] ?></td>
+        <td style="color: #f05050">
+          - <?php echo $visibility_report["Moved Down"] ?>
+        </td> -->
+        <td>
+          <?php echo intval($visibility_report["Moved Up"]) - intval($visibility_report["Moved Down"]) ?>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!------------------ ranking report header -------------------->
+<div class="row text-center">
+  <!-- chosen date div -->
+  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid">
+    <strong class="p-2">Current Report</strong>
+    <p>
+      <?php
+      echo date_format(date_create($chosen_date), 'm-d-Y');
+      ?>
+    </p>
+  </div>
+  <!-- next report date div -->
+  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid">
+    <strong>Next Report</strong>
+    <p>
+      <?php
+      echo date_format($next_date, 'm-d-Y');
+      ?>
+    </p>
+  </div>
+  <!-- div which lets you select date -->
+  <div class="col-md-4" style="padding: 15px; background-color: #939597;">
+    <strong>Report History</strong><br>
+    <select id="select-date" placeholder="Choose Date"
+      onchange="getProjectDate('findreport3.php?pid=' + <?php echo $pid ?> + '&date=' + this.value)"
+      class="col-md-6 col-md-offset-3">
+      <option value="">Choose Date</option>
+      <?php
+      // puts all dates here to select past date
+      foreach ($dates as $dateAndDepth) {
+        $date = $dateAndDepth["date"];
+        ?>
+      <option value=<?php echo $date ?> <?php echo $date == $chosen_date ? 'selected="selected"' : '' ?>>
+        <?php echo date_format(date_create($date), 'm-d-Y') ?>
+      </option>
+      <?php
+      }
+      ?>
+    </select>
+  </div>
+</div>
+
 <?php
 
 // current report & previous store file name
@@ -209,79 +283,7 @@ if ($responseRows["response_code"] != 0 && $responseRows["response_code"] != 10)
     }
     closedir($dir_handle);
     ?>
-<!--------------------- visibility table --------------------->
-<div class="col-md-6 text-center col-md-offset-3">
-  <table class="table table-responsible">
-    <thead>
-      <tr class="bg-warning">
-        <th class="text-center">Top 10</th>
-        <th class="text-center">Top 20</th>
-        <th class="text-center">Top 30</th>
-        <th class="text-center">Total Move</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <?php echo $visibility_report["Top 10"] ?>
-        </td>
-        <td><?php echo $visibility_report["Top 20"] ?></td>
-        <td>
-          <?php echo $visibility_report["Top 30"] ?>
-        </td>
-        <!-- <td style="color: #27c24c">+ <?php echo $visibility_report["Moved Up"] ?></td>
-            <td style="color: #f05050">
-              - <?php echo $visibility_report["Moved Down"] ?>
-            </td> -->
-        <td>
-          <?php echo intval($visibility_report["Moved Up"]) - intval($visibility_report["Moved Down"]) ?>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 
-<!------------------ ranking report header -------------------->
-<div class="row text-center">
-  <!-- chosen date div -->
-  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid">
-    <strong class="p-2">Current Report</strong>
-    <p>
-      <?php
-          echo date_format(date_create($chosen_date), 'm-d-Y');
-          ?>
-    </p>
-  </div>
-  <!-- next report date div -->
-  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid">
-    <strong>Next Report</strong>
-    <p>
-      <?php
-          echo date_format($next_date, 'm-d-Y');
-          ?>
-    </p>
-  </div>
-  <!-- div which lets you select date -->
-  <div class="col-md-4" style="padding: 15px; background-color: #939597;">
-    <strong>Report History</strong><br>
-    <select id="select-date" placeholder="Choose Date"
-      onchange="getProjectDate('findreport3.php?pid=' + <?php echo $pid ?> + '&date=' + this.value)"
-      class="col-md-6 col-md-offset-3">
-      <option value="">Choose Date</option>
-      <?php
-          // puts all dates here to select past date
-          foreach ($dates as $dateAndDepth) {
-            $date = $dateAndDepth["date"];
-            ?>
-      <option value=<?php echo $date ?> <?php echo $date == $chosen_date ? 'selected="selected"' : '' ?>>
-        <?php echo date_format(date_create($date), 'm-d-Y') ?>
-      </option>
-      <?php
-          }
-          ?>
-    </select>
-  </div>
-</div>
 <!---------------- Displays Report as table -------------------->
 <table class="table table-responsible table-striped">
   <thead>
