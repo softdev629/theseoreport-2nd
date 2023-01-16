@@ -80,7 +80,7 @@ if ($_SESSION['usertype'] != 'Client') {
           if (req.status == 200) {
             document.getElementById('projectdiv').innerHTML = req.responseText;
           } else {
-            alert("There was a problem while using XMLHTTP:\n" + req.statusText);
+            getProject(strURL);
           }
         }
       }
@@ -104,7 +104,7 @@ if ($_SESSION['usertype'] != 'Client') {
             //   }
             // });
           } else {
-            alert("There was a problem while using XMLHTTP:\n" + req.statusText);
+            getProjectDate(strURL);
           }
         }
       }
@@ -194,7 +194,7 @@ if ($_SESSION['usertype'] != 'Client') {
 
       </div>
     </section>
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+
     <!-- footer -->
     <?php include("includes/footer.php"); ?>
     <!-- footer -->

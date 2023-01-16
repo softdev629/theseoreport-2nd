@@ -27,7 +27,7 @@ function hideURLbar() {
 <link rel="stylesheet" href="<?PHP echo $website_url; ?>/css/monthly.css">
 <!-- //calendar -->
 <!-- //font-awesome icons -->
-<script src="<?PHP echo $website_url; ?>/js/jquery2.0.3.min.js"></script>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="<?PHP echo $website_url; ?>/js/raphael-min.js"></script>
 <!-- <script src="<?PHP echo $website_url; ?>/js/morris.js"></script> -->
 </head>
