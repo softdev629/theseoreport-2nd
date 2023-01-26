@@ -1,0 +1,16 @@
+.linktable {
+  width: 100%;
+  border: solid 1px rgb(225, 225, 225);
+  border-spacing: 0ch;
+}
+
+.linktable th{
+  box-shadow: 0 -50px 40px -30px #d8e4e4 inset;
+  color: rgb(75, 75, 75);
+}
+
+.linktable th, .linktable td{
+  border: solid 1px rgb(225, 225, 225);
+  padding: 10px 20px;
+  color: rgb(65, 65, 65);
+}

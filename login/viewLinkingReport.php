@@ -18,8 +18,9 @@ require_once __DIR__ . '/includes/init-session.php';
   <link href="<?php echo $website_url ?>/css/style.css" rel='stylesheet' type='text/css' />
   <link href="<?php echo $website_url ?>/css/style-responsive.css" rel="stylesheet" />
   <link href="<?php echo $website_url ?>/css/font-awesome.css" rel="stylesheet">
-  <link href="<?php echo $website_url ?>/css/table-main.css" rel="stylesheet">
-  <link href="<?php echo $website_url ?>/css/perfect-scrollbar.css" rel="stylesheet">
+  <link href="<?php echo $website_url ?>/css/link.css" rel="stylesheet">
+  <!-- <link href="<?php echo $website_url ?>/css/table-main.css" rel="stylesheet"> -->
+  <!-- <link href="<?php echo $website_url ?>/css/perfect-scrollbar.css" rel="stylesheet"> -->
 </head>
 
 <body>
@@ -63,11 +64,12 @@ require_once __DIR__ . '/includes/init-session.php';
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         $spreadsheet = $reader->load("reports/" . $_GET["path"]);
         $worksheet = $spreadsheet->getActiveSheet();
-        // Checkes entire row is empty
-        $flag = 0;
 
         // (B) LOOP THROUGH ROWS OF CURRENT WORKSHEET
         foreach ($worksheet->getRowIterator() as $row) {
+          // Checkes entire row is empty
+          $flag = 0;
+
           // (B1) READ CELLS
           $cellIterator = $row->getCellIterator();
           $cellIterator->setIterateOnlyExistingCells(false);
@@ -89,21 +91,21 @@ require_once __DIR__ . '/includes/init-session.php';
 
           // (B2) OUTPUT HTML
           if ($flag == 2)
-            echo "<div class='table100-head'><table><thead><tr class='row100 head'>";
+            echo "<table class='linktable'><thead><tr>";
           else
-            echo "<tr class='row100 body'>";
+            echo "<tr>";
           $index = 0;
           foreach ($cellIterator as $cell) {
-            if ($index > 5)
+            if ($index > 3)
               break;
             if ($flag == 2)
-              echo "<th class='cell100 column" . ($index + 1) . "'>" . $cell->getValue() . "</th>";
+              echo "<th>" . $cell->getValue() . "</th>";
             else
-              echo "<td class='cell100 column" . ($index + 1) . "'>" . $cell->getValue() . "</td>";
+              echo "<td>" . $cell->getValue() . "</td>";
             ++$index;
           }
           if ($flag == 2)
-            echo "</tr></thead></table></div><div class='table100-body js-pscroll ps ps--active-y'><table><tbody>";
+            echo "</tr></thead><tbody>";
           else
             echo "</tr>";
         }

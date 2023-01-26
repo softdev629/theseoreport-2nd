@@ -131,7 +131,9 @@ if ($visibilityResponse["response_code"] != 0 && $visibilityResponse["response_c
         <td>
           <?php echo $visibility_report["Top 10"] ?>
         </td>
-        <td><?php echo $visibility_report["Top 20"] ?></td>
+        <td>
+          <?php echo $visibility_report["Top 20"] ?>
+        </td>
         <td>
           <?php echo $visibility_report["Top 30"] ?>
         </td>
@@ -150,7 +152,7 @@ if ($visibilityResponse["response_code"] != 0 && $visibilityResponse["response_c
 <!------------------ ranking report header -------------------->
 <div class="row text-center">
   <!-- chosen date div -->
-  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid">
+  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid; font-size: 20px;">
     <strong class="p-2">Current Report</strong>
     <p>
       <?php
@@ -159,7 +161,7 @@ if ($visibilityResponse["response_code"] != 0 && $visibilityResponse["response_c
     </p>
   </div>
   <!-- next report date div -->
-  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid">
+  <div class="col-md-4" style="padding: 15px; background-color: #939597; border-right: 1px solid; font-size: 20px;">
     <strong>Next Report</strong>
     <p>
       <?php
@@ -168,7 +170,7 @@ if ($visibilityResponse["response_code"] != 0 && $visibilityResponse["response_c
     </p>
   </div>
   <!-- div which lets you select date -->
-  <div class="col-md-4" style="padding: 15px; background-color: #939597;">
+  <div class="col-md-4" style="padding: 15px; background-color: #939597; font-size: 20px;">
     <strong>Report History</strong><br>
     <select id="select-date" placeholder="Choose Date"
       onchange="getProjectDate('findreport3.php?pid=' + <?php echo $pid ?> + '&date=' + this.value)"
@@ -180,8 +182,7 @@ if ($visibilityResponse["response_code"] != 0 && $visibilityResponse["response_c
         $date = $dateAndDepth["date"];
         ?>
       <option value=<?php echo $date ?> <?php echo $date == $chosen_date ? 'selected="selected"' : '' ?>>
-        <?php echo date_format(date_create($date), 'm-d-Y') ?>
-      </option>
+        <?php echo date_format(date_create($date), 'm-d-Y') ?> </option>
       <?php
       }
       ?>
@@ -306,23 +307,32 @@ if ($responseRows["response_code"] != 0 && $responseRows["response_code"] != 10)
       </td>
       <td>
         <?php
-              echo $value["google"];
+              if ($value["google"] != '-')
+                echo '<a href="https://www.google.com/search?q=' . implode("+", explode(" ", $key)) . '">' . $value["google"] . '</a>';
+              else
+                echo $value["google"];
               if ($previous_report[$key]["google"] != '-' && $value["google"] != '-' && intval($previous_report[$key]["google"]) > intval($value["google"]))
-                echo "<span class='badge bg-success'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . (intval($previous_report[$key]["google"]) - intval($value["google"])) . "</span>"
+                echo "<span style='color: rgb(128, 172, 74)'> +" . (intval($previous_report[$key]["google"]) - intval($value["google"])) . "</span>"
                   ?>
       </td>
       <td>
-        <?php echo $value["bing"] ?>
         <?php
+              if ($value["bing"] != '-')
+                echo '<a href="https://www.bing.com/search?q=' . implode("+", explode(" ", $key)) . '">' . $value["bing"] . '</a>';
+              else
+                echo $value["bing"];
               if ($previous_report[$key]["bing"] != '-' && $value["bing"] != '-' && intval($previous_report[$key]["bing"]) > intval($value["bing"]))
-                echo "<span class='badge bg-success'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . (intval($previous_report[$key]["bing"]) - intval($value["bing"])) . "</span>"
+                echo "<span style='color: rgb(128, 172, 74)'> +" . (intval($previous_report[$key]["bing"]) - intval($value["bing"])) . "</span>"
                   ?>
       </td>
       <td>
-        <?php echo $value["yahoo"] ?>
         <?php
+              if ($value["yahoo"] != '-')
+                echo '<a href="https://ca.search.yahoo.com/search?q=' . implode("+", explode(" ", $key)) . '">' . $value["yahoo"] . '</a>';
+              else
+                echo $value["yahoo"];
               if ($previous_report[$key]["yahoo"] != '-' && $value["yahoo"] != '-' && intval($previous_report[$key]["yahoo"]) > intval($value["yahoo"]))
-                echo "<span class='badge bg-success'><i class='fa fa-arrow-up' style='font-size:12px'></i> " . (intval($previous_report[$key]["yahoo"]) - intval($value["yahoo"])) . "</span>"
+                echo "<span style='color: rgb(128, 172, 74)'> +" . (intval($previous_report[$key]["yahoo"]) - intval($value["yahoo"])) . "</span>"
                   ?>
       </td>
     </tr>
