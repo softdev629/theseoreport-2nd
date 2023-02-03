@@ -1,6 +1,6 @@
-# Project Name
+# SEO Report 2.0
 
-> SEO Report Project (version 2)
+> This is SEO Report Project (version 2)
 > Live demo [_here_](https://www.theseoreporting.com/login). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
