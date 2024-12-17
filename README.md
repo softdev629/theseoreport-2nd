@@ -15,7 +15,6 @@
 - [Room for Improvement](#room-for-improvement)
 - [Acknowledgements](#acknowledgements)
 - [Contact](#contact)
-<!-- * [License](#license) -->
 
 ## General Information
 
@@ -45,8 +44,6 @@ List the ready features here:
 ![Linking screenshot](./img/screenshot-2.png)
 ![Ranking screenshot](./img/screenshot-3.png)
 ![Excelviewer screenshot](./img/screenshot-4.png)
-
-<!-- If you have screenshots you'd like to share, include them here. -->
 
 ## Setup
 
@@ -85,10 +82,4 @@ Give credit here.
 
 ## Contact
 
-Created by [@violetstar701](https://www.flynerd.pl/) - feel free to contact me!
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+Created by [@softdev629](https://softdev629.github.io) - feel free to contact me!
